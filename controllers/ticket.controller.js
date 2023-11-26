@@ -18,7 +18,7 @@ exports.createTicket = async (req, res) => {
      * Logic to find an Engineer in the Approved state
      */
     const engineer = await User.findOne({
-        userType: constants.userType.engineer,
+        userType: constants.userTypes.engineer,
         userStatus: constants.userStatus.approved,
     });
     ticketObject.assignee = engineer.userId;
