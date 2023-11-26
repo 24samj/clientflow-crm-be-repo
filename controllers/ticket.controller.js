@@ -15,7 +15,7 @@ exports.createTicket = async (req, res) => {
     try {
         const ticketObj = req.body;
 
-        ticketObj.reporter = req.reporter;
+        ticketObj.reporter = req.body.reporter;
 
         // Find a engineer in the DB and set ticketObj.assignee = userId;
         const engineerCount = await User.count({
