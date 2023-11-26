@@ -12,13 +12,7 @@ const sendEmail = require("../utils/NotificationClient").sendEmail;
  *   As soon as ticket is created, it will be assigned an Engineer if present
  */
 exports.createTicket = async (req, res) => {
-    const ticketObject = {
-        title: req.body.title,
-        ticketPriority: req.body.ticketPriority,
-        description: req.body.description,
-        status: req.body.status,
-        reporter: req.userId, //this will be retrieved from the middleware
-    };
+    const ticketObject = req.body;
 
     /**
      * Logic to find an Engineer in the Approved state

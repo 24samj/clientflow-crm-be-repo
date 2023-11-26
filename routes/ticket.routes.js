@@ -3,7 +3,7 @@ const { authJwt, verifyTicketRequestBody } = require("../middlewares");
 
 module.exports = function (app) {
     app.post(
-        "/crm/api/v1/tickets",
+        "/crm/api/v1/tickets/",
         [
             authJwt.verifyToken,
             verifyTicketRequestBody.validateTicketRequestBody,
