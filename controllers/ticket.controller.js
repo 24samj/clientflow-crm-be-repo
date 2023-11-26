@@ -56,7 +56,7 @@ exports.updateTicket = async (req, res) => {
     if (
         ticket.reporter == req.userId ||
         ticket.assignee == req.userId ||
-        savedUser.userType == constants.userType.admin
+        savedUser.userType == constants.userTypes.admin
     ) {
         //Allowed to update
         (ticket.title =
