@@ -28,7 +28,7 @@ exports.createTicket = async (req, res) => {
         userStatus: constants.userStatus.approved,
     }).skip(random);
 
-    ticketObj.assignee = assignee.userId;
+    ticketObject.assignee = assignee.userId;
 
     try {
         const ticket = await Ticket.create(ticketObject);
