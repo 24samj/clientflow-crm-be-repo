@@ -3,6 +3,7 @@
  * Only the user of type ADMIN should be able to perform the operations
  * defined in the User Controller
  */
+const { compareSync } = require("bcryptjs");
 const User = require("../models/user.model");
 const objectConvertor = require("../utils/objectConverter");
 
@@ -113,6 +114,7 @@ exports.findById = async (req, res) => {
 
 exports.update = async (req, res) => {
     const userIdReq = req.params.userId;
+    console.log("params is ", req.params);
     try {
         const user = await User.findOneAndUpdate(
             {
@@ -124,6 +126,7 @@ exports.update = async (req, res) => {
                 userType: req.body.userType,
             }
         ).exec();
+        console.log("user is ", user);
         res.status(200).send({
             message: `User record has been updated successfully`,
         });
