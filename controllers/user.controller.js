@@ -115,6 +115,7 @@ exports.findById = async (req, res) => {
 exports.update = async (req, res) => {
     const userIdReq = req.params.userId;
     console.log("params is ", req.params);
+    console.log("req body is ", req.body);
     try {
         const user = await User.findOneAndUpdate(
             {
