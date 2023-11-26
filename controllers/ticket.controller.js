@@ -15,13 +15,20 @@ exports.createTicket = async (req, res) => {
     const ticketObject = req.body;
 
     /**
-     * Logic to find an Engineer in the Approved state
+     * Logic to find a random Engineer in the Approved state
      */
-    const engineer = await User.findOne({
+    const engineerCount = await User.count({
         userType: constants.userTypes.engineer,
         userStatus: constants.userStatus.approved,
     });
-    ticketObject.assignee = engineer.userId;
+    const random = Math.floor(Math.random() * engineerCount);
+
+    const assignee = await User.findOne({
+        userType: constants.userTypes.engineer,
+        userStatus: constants.userStatus.approved,
+    }).skip(random);
+
+    ticketObj.assignee = assignee.userId;
 
     try {
         const ticket = await Ticket.create(ticketObject);
