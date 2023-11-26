@@ -122,7 +122,7 @@ exports.update = async (req, res) => {
                 userId: userIdReq,
             },
             {
-                userName: req.body.userName,
+                name: req.body.name,
                 userStatus: req.body.userStatus,
                 userType: req.body.userType,
             }
