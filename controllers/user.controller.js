@@ -113,24 +113,31 @@ exports.findById = async (req, res) => {
 
 exports.update = async (req, res) => {
     const userIdReq = req.params.userId;
+
+    // Check if the user exists
+    const existingUser = await User.findById(userIdReq);
+
+    if (!existingUser) {
+        return res.status(404).send({
+            message: `User with this id [${userIdReq}] is not found`,
+        });
+    }
+
     try {
-        const user = await User.findOneAndUpdate(
-            {
-                userId: userIdReq,
-            },
-            {
-                userName: req.body.userName,
-                userStatus: req.body.userStatus,
-                userType: req.body.userType,
-            }
-        ).exec();
+        // Update the user details
+        await User.findByIdAndUpdate(userIdReq, {
+            userName: req.body.userName,
+            userStatus: req.body.userStatus,
+            userType: req.body.userType,
+        });
+
         res.status(200).send({
             message: `User record has been updated successfully`,
         });
     } catch (err) {
         console.log("Error while updating the record", err.message);
         res.status(500).send({
-            message: "Some internal error occured",
+            message: "Some internal error occurred",
         });
     }
 };
