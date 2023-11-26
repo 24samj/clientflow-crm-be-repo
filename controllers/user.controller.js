@@ -114,8 +114,6 @@ exports.findById = async (req, res) => {
 
 exports.update = async (req, res) => {
     const userIdReq = req.params.userId;
-    console.log("params is ", req.params);
-    console.log("req body is ", req.body);
     try {
         const user = await User.findOneAndUpdate(
             {
@@ -125,9 +123,9 @@ exports.update = async (req, res) => {
                 name: req.body.name,
                 userStatus: req.body.userStatus,
                 userType: req.body.userType,
+                email: req.body.email,
             }
         ).exec();
-        console.log("user is ", user);
         res.status(200).send({
             message: `User record has been updated successfully`,
         });
