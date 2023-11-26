@@ -12,56 +12,31 @@ const sendEmail = require("../utils/NotificationClient").sendEmail;
  *   As soon as ticket is created, it will be assigned an Engineer if present
  */
 exports.createTicket = async (req, res) => {
-    const ticketObject = req.body;
-
-    /**
-     * Logic to find a random Engineer in the Approved state
-     */
-    const engineerCount = await User.count({
-        userType: constants.userTypes.engineer,
-        userStatus: constants.userStatus.approved,
-    });
-    const random = Math.floor(Math.random() * engineerCount);
-
-    const assignee = await User.findOne({
-        userType: constants.userTypes.engineer,
-        userStatus: constants.userStatus.approved,
-    }).skip(random);
-
-    ticketObject.assignee = assignee.userId;
-
     try {
-        const ticket = await Ticket.create(ticketObject);
+        const ticketObj = req.body;
 
-        if (ticket) {
-            //Updating the customer
-            const user = await User.findOne({
-                userId: req.userId,
-            });
-            user.ticketsCreated.push(ticket._id);
-            await user.save();
+        ticketObj.reporter = req.reporter;
 
-            //Updating the Engineer
-            engineer.ticketsAssigned.push(ticket._id);
-            await engineer.save();
+        // Find a engineer in the DB and set ticketObj.assignee = userId;
+        const engineerCount = await User.count({
+            userType: constants.userTypes.engineer,
+            userStatus: constants.userStatus.approved,
+        });
+        const random = Math.floor(Math.random() * engineerCount);
 
-            /**
-             * Sending the notification to the assigned Engineer in asynchronous manner
-             */
-            //   sendEmail(
-            //     ticket._id,
-            //     "Ticket with id: " + ticket._id + " created",
-            //     ticket.description,
-            //     user.email + "," + engineer.email,
-            //     user.email
-            //   );
+        const assignee = await User.findOne({
+            userType: constants.userTypes.engineer,
+            userStatus: constants.userStatus.approved,
+        }).skip(random);
 
-            res.status(201).send(objectConvertor.ticketResponse(ticket));
-        }
-    } catch (err) {
-        console.log("Some error happened while creating ticket", err.message);
+        ticketObj.assignee = assignee.userId;
+
+        const ticket = await Ticket.create(ticketObj);
+
+        res.send(ticket);
+    } catch (ex) {
         res.status(500).send({
-            message: "Some internal server error",
+            message: `Error occured - ${ex.message}`,
         });
     }
 };
